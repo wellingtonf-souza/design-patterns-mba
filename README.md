@@ -1,4 +1,5 @@
 ## Sinergia entre Padrões
+---
 
 Analise abaixo dois trechos do documento de requisitos de um novo sistema inteligente de monitoramento de edifícios:
 
@@ -15,12 +16,6 @@ Exemplos:
 * O código cliente que manipula os elevadores deve ser o mais inconsciente possível dos objetos concretos existentes
 * Nesta primeira versão do sistema, um elevador nunca estará em dois estados ao mesmo tempo.
 * Embora não haja limitação de memória na infraestrutura computacional usada, deve-se prezar para que não haja criação desnecessária de objetos em memória.
-
-O que vocês devem fazer ?
-
-Projetar com diagramas e trechos de código (Java ou Python) o contexto descrito acima.
-
-É prevista a utilização de três padrões nesta solução.
 
 Entrega:
 
