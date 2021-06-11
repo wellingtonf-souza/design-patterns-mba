@@ -1,17 +1,42 @@
-
-# from elevator import Elevator
 from abc import ABC, abstractmethod
+from state import State
 
 class StateObserver(ABC):
     @abstractmethod
-    def call_security_team(self, subject):
+    def check_stuck(self, subject: State):
+        pass
+    
+    @abstractmethod
+    def check_maintenance(self, subject: State):
         pass
 
 class StuckObserver(StateObserver):
-    def call_security_team(self, subject):
+    def check_stuck(self, subject: State):
         if subject.get_state_name() == 'Stuck':
             print('Call security and maintenance teams')
+    
+    def check_maintenance(self, subject: State):
+        pass
+
 
 class MaintenanceObserver(StateObserver):
-    def call_security_team(self, subject):
+    def check_stuck(self, subject: State):
         pass
+
+    def check_maintenance(self, subject: State):
+        if subject.get_state_name() == 'Maintenance' and subject._behavior[0] == 'normal':
+            print('Mudando comportamento dos elevadores para unusual')
+            subject.behavior_unusual()
+
+
+class TransitionStateObserver(ABC):
+    @abstractmethod
+    def check_transition(self, old: State, new: State):
+        pass
+
+class MaintenanceTransitionObserver(TransitionStateObserver):
+
+    def check_transition(self, old: State, new: State):
+        if old.get_state_name() == 'Maintenance' and new.get_state_name() != 'Maintenance':
+            print('Mudando comportamento dos elevadores para normal')
+            new.behavior_normal()

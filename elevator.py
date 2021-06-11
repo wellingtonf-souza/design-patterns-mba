@@ -1,60 +1,35 @@
 
 from abc import ABC, abstractmethod
 from typing import List
-from observer import StateObserver
-
-class State(ABC):
-    _instance = None
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance 
-    @abstractmethod
-    def execute(self):
-        pass
+from state import State
+from observer import StateObserver, TransitionStateObserver
 
 class Elevator:
-    
-    _state = None
-    _observers: List[StateObserver] = []
 
     def __init__(self, state: State):
-        self.transition_to(state)
+        self._state = state
+        self._observersState: List[StateObserver] = []
+        self._observersTransition: List[TransitionStateObserver] = []
 
     def transition_to(self, state: State):
+        self.verifyTransitionStateObserver(self._state, state)
         self._state = state
 
     def operation(self):
         self._state.execute()
-        self.verify()
-
-    def get_state_name(self):
-        return type(self._state).__name__
+        self.verifyStateObserver()
     
-    def attach(self, observer: StateObserver):
-        self._observers.append(observer)
+    def attachStateObserver(self, observer: StateObserver):
+        self._observersState.append(observer)
 
-    def verify(self):
-        for obs in self._observers:
-            obs.call_security_team(self)
+    def attachTransitionStateObserver(self, observer: TransitionStateObserver):
+        self._observersTransition.append(observer)
 
-class Up(State):   
-    def execute(self):
-        print("Elevador Subindo")
+    def verifyStateObserver(self):
+        for obs in self._observersState:
+            obs.check_stuck(self._state)
+            obs.check_maintenance(self._state)
 
-class Down(State):
-    def execute(self):
-        print("Elevador Descendo")
-
-class Stop(State):
-    def execute(self):
-        print("Elevador Parado")
-
-class Stuck(State):
-    def execute(self):
-        print("Elevador Emperrado")
-
-class Maintenance(State):
-    def execute(self):
-        print("Elevador Em Manutencao")
+    def verifyTransitionStateObserver(self, old: State, new: State):
+        for obs in self._observersTransition:
+            obs.check_transition(old, new)
