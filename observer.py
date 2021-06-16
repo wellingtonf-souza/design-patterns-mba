@@ -24,9 +24,9 @@ class MaintenanceObserver(StateObserver):
         pass
 
     def check_maintenance(self, subject: State):
-        if subject.get_state_name() == 'Maintenance' and subject._behavior[0] == 'normal':
-            print('Mudando comportamento dos elevadores para unusual')
-            subject.behavior_unusual()
+        if subject.get_state_name() == 'Maintanance' and subject._behavior[0] == 'normal':
+            print('Mudando comportamento dos elevadores para anormal')
+            subject.behavior_anormal()
 
 
 class TransitionStateObserver(ABC):
@@ -37,6 +37,6 @@ class TransitionStateObserver(ABC):
 class MaintenanceTransitionObserver(TransitionStateObserver):
 
     def check_transition(self, old: State, new: State):
-        if old.get_state_name() == 'Maintenance' and new.get_state_name() != 'Maintenance':
+        if old.get_state_name() == 'Maintanance' and new.get_state_name() != 'Maintanance':
             print('Mudando comportamento dos elevadores para normal')
             new.behavior_normal()

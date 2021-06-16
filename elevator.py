@@ -4,7 +4,7 @@ from typing import List
 from state import State
 from observer import StateObserver, TransitionStateObserver
 
-class Elevator:
+class ElevatorContext:
 
     def __init__(self, state: State):
         self._state = state
@@ -12,24 +12,24 @@ class Elevator:
         self._observersTransition: List[TransitionStateObserver] = []
 
     def transition_to(self, state: State):
-        self.verifyTransitionStateObserver(self._state, state)
+        self.verify_transition_state_observer(self._state, state)
         self._state = state
 
     def operation(self):
         self._state.execute()
-        self.verifyStateObserver()
+        self.verify_state_observer()
     
-    def attachStateObserver(self, observer: StateObserver):
+    def attach_state_observer(self, observer: StateObserver):
         self._observersState.append(observer)
 
-    def attachTransitionStateObserver(self, observer: TransitionStateObserver):
+    def attach_transition_state_observer(self, observer: TransitionStateObserver):
         self._observersTransition.append(observer)
 
-    def verifyStateObserver(self):
+    def verify_state_observer(self):
         for obs in self._observersState:
             obs.check_stuck(self._state)
             obs.check_maintenance(self._state)
 
-    def verifyTransitionStateObserver(self, old: State, new: State):
+    def verify_transition_state_observer(self, old: State, new: State):
         for obs in self._observersTransition:
             obs.check_transition(old, new)

@@ -11,8 +11,8 @@ class State(ABC):
             cls._instance = cls()
         return cls._instance 
 
-    def behavior_unusual(self):
-        self._behavior.append('unusual')
+    def behavior_anormal(self):
+        self._behavior.append('anormal')
         self._behavior.pop(0)
     
     def behavior_normal(self):
@@ -49,6 +49,6 @@ class Stuck(State):
     def execute(self):
         print("Elevador Emperrado")
 
-class Maintenance(State):
+class Maintanance(State):
     def execute(self):
         print("Elevador Em Manutencao")
